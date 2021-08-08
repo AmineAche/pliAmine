@@ -1,3 +1,4 @@
+import 'package:fleets_app/screens/Bar/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,7 +16,7 @@ class _ProfilState extends State<Profil> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/background/login_background.png"),
+            image: AssetImage("assets/background/profile_background.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -49,13 +50,15 @@ class _ProfilState extends State<Profil> {
                         height: 30,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
+
                         //crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          buildBarinfos("Trajets", 49),
-                          buildBarinfos("Abonés", 50),
-                          buildBarinfos("???", 165),
-                          buildBarinfos("Abonnement", 89),
+                          buildBarinfos("Mes Trajets", 49),
+                          // buildBarinfos("Abonnés", 50),
+                          // buildBarinfos("???", 165),
+                          // buildBarinfos("Abonnement", 89),
                         ],
                       ),
                        SizedBox(
@@ -71,6 +74,7 @@ class _ProfilState extends State<Profil> {
           ),
         ),
       ),
+      bottomNavigationBar: NavBar(selectedIndex: 0,),
     );
   }
 
@@ -90,7 +94,7 @@ class _ProfilState extends State<Profil> {
           Text(
             number.toString(),
             style: TextStyle(
-              color: Color(0xff30b2e5),
+              color: Color(0xff007fff),
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -115,7 +119,7 @@ class _ProfilState extends State<Profil> {
         ),
         color: Colors.white,
         child: Text(
-          "Mes messages",
+          "Mes Fleets",
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
@@ -133,7 +137,7 @@ class _ProfilState extends State<Profil> {
         crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "A propos",
+          "À propos",
           style: TextStyle(
             color: Color(0xff1a85ef),
             fontSize: 18,

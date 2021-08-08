@@ -1,4 +1,7 @@
+import 'package:fleets_app/screens/Bar/navBar.dart';
+import 'package:fleets_app/screens/messages/ChatScreen.dart';
 import 'package:flutter/material.dart';
+import 'message_model.dart';
 
 class Messages extends StatefulWidget {
   @override
@@ -9,105 +12,152 @@ class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset : false,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        toolbarHeight: 80,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "MESSAGES",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+        brightness: Brightness.dark,
+        elevation: 8,
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          color: Colors.white,
+          onPressed: () {},
+        ),
+        title: Text(
+          'Mes Fleets',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            color: Colors.white,
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: chats.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Message chat = chats[index];
+          return GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ChatScreen(
+                  user: chat.sender,
+                ),
               ),
             ),
-          ],
-        ),
-      ),
-      body: Stack(
-        children: [ 
-        Container(
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 50),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background/messages_background.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        constraints: BoxConstraints.expand(),
-        child: Container(
-          child: Column(
-            children: [
-              SizedBox(height: 60),
-              rechercheBar(),
-            ],
-          ),
-        ),
-      ),
-      ],
-      ),
-    );
-  }
-
-  Widget rechercheBar() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 6,
-                offset: Offset(0, 2),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 15,
               ),
-            ],
-          ),
-          height: 50,
-          width: 250,
-          child: TextField(
-            style: TextStyle(
-              color: Colors.black87,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(2),
+                    decoration: chat.unread
+                        ? BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(40)),
+                            border: Border.all(
+                              width: 2,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            // shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                              ),
+                            ],
+                          )
+                        : BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                              ),
+                            ],
+                          ),
+                    child: CircleAvatar(
+                      radius: 35,
+                      backgroundImage: AssetImage(chat.sender.imageUrl),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    padding: EdgeInsets.only(
+                      left: 20,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  chat.sender.name,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                chat.sender.isOnline
+                                    ? Container(
+                                        margin: const EdgeInsets.only(left: 5),
+                                        width: 7,
+                                        height: 7,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      )
+                                    : Container(
+                                        child: null,
+                                      ),
+                              ],
+                            ),
+                            Text(
+                              chat.time,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            chat.text,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.black54,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          isDense: true,                      // Added this
-          contentPadding: EdgeInsets.all(14), 
-          hintText: 'Name',
-          hintStyle: TextStyle(color: Color(0xFF4f7ed1)),
-
-        ),
-      )
-        ),
-        SizedBox(width: 20,),
-        Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child:  Icon(
-                Icons.search,
-                color: Color(0xff446AA8),
-              ),
-        ),
-      ],
+          );
+        },
+      ),
+    bottomNavigationBar: NavBar(selectedIndex: 2),
     );
   }
 }
+
